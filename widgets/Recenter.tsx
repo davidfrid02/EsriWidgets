@@ -1,7 +1,11 @@
 /// <amd-dependency path="esri/core/tsSupport/declareExtendsHelper" name="__extends" />
 /// <amd-dependency path="esri/core/tsSupport/decorateHelper" name="__decorate" />
 
-import { subclass, declared, property } from "esri/core/accessorSupport/decorators";
+import {
+  subclass,
+  declared,
+  property
+} from "esri/core/accessorSupport/decorators";
 import Widget = require("esri/widgets/Widget");
 import watchUtils = require("esri/core/watchUtils");
 
@@ -25,6 +29,11 @@ interface State extends Center {
 interface Style {
   textShadow: string;
 }
+interface DivStyle {
+  backgroundColor: string;
+  padding: string;
+  borderRadius: string;
+}
 
 const CSS = {
   base: "recenter-tool"
@@ -32,15 +41,15 @@ const CSS = {
 
 @subclass("esri.widgets.Recenter")
 class Recenter extends declared(Widget) {
-
   constructor() {
     super();
-    this._onViewChange = this._onViewChange.bind(this)
+    this._onViewChange = this._onViewChange.bind(this);
   }
 
   postInitialize() {
-    watchUtils.init(this, "view.center, view.interacting, view.scale", () => this._onViewChange());
-
+    watchUtils.init(this, "view.center, view.interacting, view.scale", () =>
+      this._onViewChange()
+    );
   }
 
   //--------------------------------------------------------------------
@@ -81,18 +90,28 @@ class Recenter extends declared(Widget) {
 
   render() {
     const { x, y, scale } = this.state;
-    const styles: Style = {
-      textShadow: this.state.interacting ? '-1px 0 red, 0 1px red, 1px 0 red, 0 -1px red' : ''
+    const styles: DivStyle = {
+      backgroundColor: "white",
+      padding: "10px 10px",
+      borderRadius: "25px"
+    };
+    const textStyles: Style = {
+      textShadow: this.state.interacting
+        ? "-1px 0 red, 0 1px red, 1px 0 red, 0 -1px red"
+        : ""
     };
     return (
       <div
         bind={this}
         class={CSS.base}
         styles={styles}
-        onclick={this._defaultCenter}>
-        <p>x: {Number(x).toFixed(3)}</p>
-        <p>y: {Number(y).toFixed(3)}</p>
-        <p>scale: {Number(scale).toFixed(5)}</p>
+        onclick={this._defaultCenter}
+      >
+        <div styles={textStyles}>
+          <p>x: {Number(x).toFixed(3)}</p>
+          <p>y: {Number(y).toFixed(3)}</p>
+          <p>scale: {Number(scale).toFixed(5)}</p>
+        </div>
       </div>
     );
   }
@@ -106,15 +125,19 @@ class Recenter extends declared(Widget) {
   private _onViewChange() {
     let { interacting, center, scale } = this.view;
     this.state = {
-      x: center.x,
-      y: center.y,
+      x: center.longitude,
+      y: center.latitude,
       interacting,
       scale
     };
   }
 
   private _defaultCenter() {
-    this.view.goTo(this.initialCenter);
+    let opts = {
+      duration: 2000 // Duration of animation will be 5 seconds
+    };
+
+    this.view.goTo({ target: this.initialCenter, zoom: 7 }, opts);
   }
 }
 

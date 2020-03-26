@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>VectorTileLayer - 4.14</title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.14/esri/themes/light/main.css"
+    />
+
+    <script>
+      var locationPath = location.pathname.replace(/\/[^\/]+$/, "");
+      window.dojoConfig = {
+        packages: [
+          {
+            name: "widgets",
+            location: locationPath + "/widgets"
+          }
+        ]
+      };
+    </script>
+
+    <script src="https://js.arcgis.com/4.14/"></script>
+
+    <script>
+      require(["esri/Map", "esri/views/MapView", "widgets/Recenter"], function(
+        Map,
+        MapView,
+        Recenter
+      ) {
+        // Create a Map
+        var map = new Map({
+          basemap: "topo"
+        });
+        // Make map view and bind it to the map
+        var view = new MapView({
+          container: "viewDiv",
+          map: map,
+          zoom: 3
+        });
+
+        view.when(function() {
+          recenter = new Recenter({
+            view: view,
+            initialCenter: [34,32]
+          });
+          view.ui.add(recenter, "top-right");
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>
