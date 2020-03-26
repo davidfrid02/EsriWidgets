@@ -35,10 +35,10 @@ cd EsriWidgets
 npm install
 ```
 
-3. compile the project
+3. compile the project (-w for watch changes)
 
 ```
-tsc
+tsc -w
 ```
 
 
