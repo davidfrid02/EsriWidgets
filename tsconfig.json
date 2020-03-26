@@ -11,6 +11,6 @@
     "preserveConstEnums": true,
     "suppressImplicitAnyIndexErrors": true
   },
-  "include": ["./widgets/*"],
+  "include": ["./widgets/*/*"],
   "exclude": ["node_modules"]
 }

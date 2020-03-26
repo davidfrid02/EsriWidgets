@@ -27,10 +27,13 @@
     <script>
       var locationPath = location.pathname.replace(/\/[^\/]+$/, "");
       window.dojoConfig = {
+        aliases: [
+          ["widgets/recenter", "widgets/recenter/Recenter"],
+        ],
         packages: [
           {
             name: "widgets",
-            location: locationPath + "/widgets"
+            location: locationPath + "widgets"
           }
         ]
       };
@@ -39,11 +42,11 @@
     <script src="https://js.arcgis.com/4.14/"></script>
 
     <script>
-      require(["esri/Map", "esri/views/MapView", "widgets/Recenter"], function(
-        Map,
-        MapView,
-        Recenter
-      ) {
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "widgets/recenter"
+      ], function(Map, MapView, Recenter) {
         // Create a Map
         var map = new Map({
           basemap: "topo"
@@ -58,7 +61,7 @@
         view.when(function() {
           recenter = new Recenter({
             view: view,
-            initialCenter: [34,32]
+            initialCenter: [34, 32]
           });
           view.ui.add(recenter, "top-right");
         });

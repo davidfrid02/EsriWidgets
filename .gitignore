@@ -9,5 +9,7 @@ package-lock.json
 node_modules
 
 #app exclude javascript and map files
+widgets/*/*.js
+widgets/*/*.js.map
 widgets/*.js
 widgets/*.js.map
