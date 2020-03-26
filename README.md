@@ -23,17 +23,19 @@ npm install -g typescript
 
 To start working you need to:
 
+1. go to esriWidgets
+
 ```
 cd EsriWidgets
 ```
 
-Run npm install
+2. Run npm install
 
 ```
 npm install
 ```
 
-Then compile the project
+3. compile the project
 
 ```
 tsc
