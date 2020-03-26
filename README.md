@@ -1,4 +1,4 @@
-# Project Title
+# Esri Custom Widgets
 
 Create Custom widgets for esri javascript api
 
@@ -49,8 +49,8 @@ In Head tag insert
     window.dojoConfig = {
     packages: [
             {
-                name: "app",
-                location: locationPath + "/app"
+                name: "widgets",
+                location: locationPath + "/widgets"
             }
         ]
     };
