@@ -1,0 +1,13 @@
+#vs code settings
+.vscode
+
+# utils
+index.html
+package-lock.json
+
+#node_modules
+node_modules
+
+#app exclude javascript and map files
+widgets/*.js
+widgets/*.js.map
