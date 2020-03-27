@@ -1,6 +1,10 @@
 /// <amd-dependency path="esri/core/tsSupport/declareExtendsHelper" name="__extends" />
 /// <amd-dependency path="esri/core/tsSupport/decorateHelper" name="__decorate" />
 
+// pure js class for tree (this one is without jquery)
+// https://github.com/vakata/jstree/tree/v.4.0
+
+
 import {
   subclass,
   declared,
