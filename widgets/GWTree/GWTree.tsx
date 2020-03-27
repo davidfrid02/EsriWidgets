@@ -4,6 +4,11 @@
 // pure js class for tree (this one is without jquery)
 // https://github.com/vakata/jstree/tree/v.4.0
 
+// react tree
+// https://github.com/react-component/tree
+// https://github.com/jakezatecky/react-checkbox-tree
+// https://github.com/naisutech/react-tree
+
 
 import {
   subclass,
