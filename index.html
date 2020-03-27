@@ -28,7 +28,7 @@
       var locationPath = location.pathname.replace(/\/[^\/]+$/, "");
       window.dojoConfig = {
         aliases: [
-          ["widgets/recenter", "widgets/recenter/Recenter"],
+          ["widgets/Recenter", "widgets/Recenter/Recenter"],
         ],
         packages: [
           {
@@ -45,7 +45,7 @@
       require([
         "esri/Map",
         "esri/views/MapView",
-        "widgets/recenter"
+        "widgets/Recenter"
       ], function(Map, MapView, Recenter) {
         // Create a Map
         var map = new Map({
