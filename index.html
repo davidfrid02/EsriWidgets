@@ -29,6 +29,7 @@
       window.dojoConfig = {
         aliases: [
           ["widgets/Recenter", "widgets/Recenter/Recenter"],
+          ["widgets/GWTree", "widgets/GWTree/GWTree"]
         ],
         packages: [
           {
@@ -45,8 +46,10 @@
       require([
         "esri/Map",
         "esri/views/MapView",
-        "widgets/Recenter"
-      ], function(Map, MapView, Recenter) {
+        "esri/widgets/LayerList",
+        "widgets/Recenter",
+        "widgets/GWTree"
+      ], function(Map, MapView, LayerList, Recenter, GWTree) {
         // Create a Map
         var map = new Map({
           basemap: "topo"
@@ -58,13 +61,27 @@
           zoom: 3
         });
 
-        view.when(function() {
-          recenter = new Recenter({
-            view: view,
-            initialCenter: [34, 32]
-          });
-          view.ui.add(recenter, "top-right");
+        var layerList = new LayerList({
+          view: view
         });
+        // Adds widget below other elements in the top left corner of the view
+        view.ui.add(layerList, {
+          position: "top-left"
+        });
+
+        let gwtree = new GWTree({
+            view: view,
+            showChildren : false
+          });
+        view.ui.add(gwtree, "top-left");
+
+        // view.when(function() {
+        //   recenter = new Recenter({
+        //     view: view,
+        //     initialCenter: [34, 32]
+        //   });
+        //   view.ui.add(recenter, "top-right");
+        // });
       });
     </script>
   </head>
