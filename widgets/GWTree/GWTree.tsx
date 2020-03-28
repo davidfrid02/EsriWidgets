@@ -24,6 +24,10 @@ import MapView = require("esri/views/MapView");
 import SceneView = require("esri/views/SceneView");
 import GroupLayer = require("esri/layers/GroupLayer");
 import FeatureLayer = require("esri/layers/FeatureLayer");
+import Extent = require("esri/geometry/Extent");
+
+
+import layerConfig = require("./LayersConfig")
 
 interface LayersState {
   groupLayer: GroupLayer;
@@ -31,6 +35,12 @@ interface LayersState {
   gwPointLayer: FeatureLayer;
   gwPolylineLayer: FeatureLayer;
   gwPolygonLayer: FeatureLayer;
+}
+
+interface MapState {
+  interacting: boolean;
+  scale: number;
+  extent : Extent;
 }
 
 interface DivStyle {
@@ -48,10 +58,16 @@ class GWTree extends declared(Widget) {
   constructor() {
     super();
     this._onViewLoad = this._onViewLoad.bind(this);
+    this._onViewChange = this._onViewChange.bind(this);
+
   }
 
   postInitialize() {
     this._onViewLoad();
+
+    watchUtils.init(this, "view.center, view.interacting, view.scale", () =>
+      this._onViewChange()
+    );
   }
 
   //----------------------------------
@@ -65,6 +81,10 @@ class GWTree extends declared(Widget) {
   @property()
   @renderable()
   layersState: LayersState;
+
+  @property()
+  @renderable()
+  mapState: MapState;
 
   @property()
   @renderable()
@@ -115,26 +135,11 @@ class GWTree extends declared(Widget) {
       title: "GWLayers",
       listMode: this.showChildren ? "show" : "hide-children"
     });
+    
 
     let gwClusterLayer = new FeatureLayer({
       title: "gwClusterLayer",
-      fields: [
-        {
-          name: "ObjectID",
-          alias: "ObjectID",
-          type: "oid"
-        },
-        {
-          name: "type",
-          alias: "Type",
-          type: "string"
-        },
-        {
-          name: "place",
-          alias: "Place",
-          type: "string"
-        }
-      ],
+      fields: layerConfig.getClusterField() as any,
       objectIdField: "ObjectID",
       geometryType: "point",
       spatialReference: { wkid: 4326 },
@@ -143,23 +148,7 @@ class GWTree extends declared(Widget) {
 
     let gwPointLayer = new FeatureLayer({
       title: "gwPoint",
-      fields: [
-        {
-          name: "ObjectID",
-          alias: "ObjectID",
-          type: "oid"
-        },
-        {
-          name: "type",
-          alias: "Type",
-          type: "string"
-        },
-        {
-          name: "place",
-          alias: "Place",
-          type: "string"
-        }
-      ],
+      fields: layerConfig.getFields() as any,
       objectIdField: "ObjectID",
       geometryType: "point",
       spatialReference: { wkid: 4326 },
@@ -168,23 +157,7 @@ class GWTree extends declared(Widget) {
 
     let gwPolygonLayer = new FeatureLayer({
       title: "gwPolygon",
-      fields: [
-        {
-          name: "ObjectID",
-          alias: "ObjectID",
-          type: "oid"
-        },
-        {
-          name: "type",
-          alias: "Type",
-          type: "string"
-        },
-        {
-          name: "place",
-          alias: "Place",
-          type: "string"
-        }
-      ],
+      fields: layerConfig.getFields() as any,
       objectIdField: "ObjectID",
       geometryType: "polygon",
       spatialReference: { wkid: 4326 },
@@ -193,23 +166,7 @@ class GWTree extends declared(Widget) {
 
     let gwPolylineLayer = new FeatureLayer({
       title: "gwPolyline",
-      fields: [
-        {
-          name: "ObjectID",
-          alias: "ObjectID",
-          type: "oid"
-        },
-        {
-          name: "type",
-          alias: "Type",
-          type: "string"
-        },
-        {
-          name: "place",
-          alias: "Place",
-          type: "string"
-        }
-      ],
+      fields: layerConfig.getFields() as any,
       objectIdField: "ObjectID",
       geometryType: "polyline",
       spatialReference: { wkid: 4326 },
@@ -225,9 +182,26 @@ class GWTree extends declared(Widget) {
       gwPolygonLayer: gwPolygonLayer,
       gwPolylineLayer: gwPolylineLayer
     };
+
     this.view.map.add(groupLayer);
   };
 
+  _onViewChange = () => {
+    let { interacting, scale, extent } = this.view;
+    this.mapState = {
+      interacting,
+      scale,
+      extent
+    };
+
+    if(!interacting){
+      // query for count
+      // get cluster features
+      // get raw data
+    }
+
+    console.log(this.mapState);
+  }
   _onViewLoad = () => {
     this._createGWLayers();
   };
