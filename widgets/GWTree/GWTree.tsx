@@ -25,8 +25,9 @@ import SceneView = require("esri/views/SceneView");
 import GroupLayer = require("esri/layers/GroupLayer");
 import FeatureLayer = require("esri/layers/FeatureLayer");
 
-interface State {
+interface LayersState {
   groupLayer: GroupLayer;
+  gwClusterLauyer : FeatureLayer;
   gwPointLayer: FeatureLayer;
   gwPolylineLayer: FeatureLayer;
   gwPolygonLayer: FeatureLayer;
@@ -63,7 +64,7 @@ class GWTree extends declared(Widget) {
 
   @property()
   @renderable()
-  state: State;
+  layersState: LayersState;
 
   @property()
   @renderable()
@@ -101,9 +102,9 @@ class GWTree extends declared(Widget) {
   //-------------------------------------------------------------------
 
   _changeListMode = () => {
-    if (this.state.groupLayer) {
+    if (this.layersState.groupLayer) {
       this.showChildren = !this.showChildren;
-      this.state.groupLayer.listMode = this.showChildren
+      this.layersState.groupLayer.listMode = this.showChildren
         ? "show"
         : "hide-children";
     }
@@ -113,6 +114,31 @@ class GWTree extends declared(Widget) {
     let groupLayer = new GroupLayer({
       title: "GWLayers",
       listMode: this.showChildren ? "show" : "hide-children"
+    });
+
+    let gwClusterLayer = new FeatureLayer({
+      title: "gwClusterLayer",
+      fields: [
+        {
+          name: "ObjectID",
+          alias: "ObjectID",
+          type: "oid"
+        },
+        {
+          name: "type",
+          alias: "Type",
+          type: "string"
+        },
+        {
+          name: "place",
+          alias: "Place",
+          type: "string"
+        }
+      ],
+      objectIdField: "ObjectID",
+      geometryType: "point",
+      spatialReference: { wkid: 4326 },
+      source: []
     });
 
     let gwPointLayer = new FeatureLayer({
@@ -190,10 +216,11 @@ class GWTree extends declared(Widget) {
       source: []
     });
 
-    groupLayer.addMany([gwPointLayer, gwPolygonLayer, gwPolylineLayer]);
+    groupLayer.addMany([gwClusterLayer, gwPointLayer, gwPolygonLayer, gwPolylineLayer]);
 
-    this.state = {
+    this.layersState = {
       groupLayer: groupLayer,
+      gwClusterLauyer : gwClusterLayer,
       gwPointLayer: gwPointLayer,
       gwPolygonLayer: gwPolygonLayer,
       gwPolylineLayer: gwPolylineLayer
