@@ -139,7 +139,7 @@ class GWTree extends declared(Widget) {
 
     let gwClusterLayer = new FeatureLayer({
       title: "gwClusterLayer",
-      fields: layerConfig.getClusterField() as any,
+      fields: layerConfig.getClusterField(),
       objectIdField: "ObjectID",
       geometryType: "point",
       spatialReference: { wkid: 4326 },
@@ -148,7 +148,7 @@ class GWTree extends declared(Widget) {
 
     let gwPointLayer = new FeatureLayer({
       title: "gwPoint",
-      fields: layerConfig.getFields() as any,
+      fields: layerConfig.getFields(),
       objectIdField: "ObjectID",
       geometryType: "point",
       spatialReference: { wkid: 4326 },
@@ -157,7 +157,7 @@ class GWTree extends declared(Widget) {
 
     let gwPolygonLayer = new FeatureLayer({
       title: "gwPolygon",
-      fields: layerConfig.getFields() as any,
+      fields: layerConfig.getFields(),
       objectIdField: "ObjectID",
       geometryType: "polygon",
       spatialReference: { wkid: 4326 },
@@ -166,7 +166,7 @@ class GWTree extends declared(Widget) {
 
     let gwPolylineLayer = new FeatureLayer({
       title: "gwPolyline",
-      fields: layerConfig.getFields() as any,
+      fields: layerConfig.getFields(),
       objectIdField: "ObjectID",
       geometryType: "polyline",
       spatialReference: { wkid: 4326 },

@@ -1,5 +1,5 @@
 class LayerConfig {
-  static getFields = () => {
+  static getFields = () : any => {
     return [
       {
         name: "ObjectID",
@@ -19,7 +19,7 @@ class LayerConfig {
     ];
   };
 
-  static getClusterField = ()  => {
+  static getClusterField = () : any => {
     return [
         {
           name: "ObjectID",
