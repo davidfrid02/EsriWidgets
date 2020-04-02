@@ -9,7 +9,7 @@
 // https://github.com/jakezatecky/react-checkbox-tree
 // https://github.com/naisutech/react-tree
 
-
+var index = 0;
 import {
   subclass,
   declared,
@@ -18,6 +18,8 @@ import {
 import Widget = require("esri/widgets/Widget");
 import watchUtils = require("esri/core/watchUtils");
 
+import VanillaTree = require("vanillatree");
+
 import { renderable, tsx } from "esri/widgets/support/widget";
 
 import MapView = require("esri/views/MapView");
@@ -25,13 +27,13 @@ import SceneView = require("esri/views/SceneView");
 import GroupLayer = require("esri/layers/GroupLayer");
 import FeatureLayer = require("esri/layers/FeatureLayer");
 import Extent = require("esri/geometry/Extent");
+import Expand = require("esri/widgets/Expand");
 
-
-import layerConfig = require("./LayersConfig")
+import layerConfig = require("./LayersConfig");
 
 interface LayersState {
   groupLayer: GroupLayer;
-  gwClusterLauyer : FeatureLayer;
+  gwClusterLauyer: FeatureLayer;
   gwPointLayer: FeatureLayer;
   gwPolylineLayer: FeatureLayer;
   gwPolygonLayer: FeatureLayer;
@@ -40,7 +42,7 @@ interface LayersState {
 interface MapState {
   interacting: boolean;
   scale: number;
-  extent : Extent;
+  extent: Extent;
 }
 
 interface DivStyle {
@@ -57,17 +59,21 @@ const CSS = {
 class GWTree extends declared(Widget) {
   constructor() {
     super();
-    this._onViewLoad = this._onViewLoad.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
-
   }
 
   postInitialize() {
-    this._onViewLoad();
-
+    this.GWTree();
     watchUtils.init(this, "view.center, view.interacting, view.scale", () =>
       this._onViewChange()
     );
+  }
+
+  GWTree() {
+    //Initialize GWtree element
+    this._initGWTree();
+    //Create the GWTree
+    this._createGWTree();
   }
 
   //----------------------------------
@@ -90,11 +96,89 @@ class GWTree extends declared(Widget) {
   @renderable()
   showChildren = true;
 
+  @property()
+  @renderable()
+  expand: Expand;
+
+  @property()
+  @renderable()
+  GWTreeObj: any;
+
   //-------------------------------------------------------------------
   //
   //  Public methods
   //
   //-------------------------------------------------------------------
+
+  _createGWTree = () => {
+    const tree = new VanillaTree("#GWtree", {
+      contextmenu: [
+        {
+          label: "Hey",
+          action: function(id: any) {
+            alert("Hey " + id);
+          }
+        },
+        {
+          label: "Blah",
+          action: function(id: any) {
+            alert("Blah " + id);
+          }
+        }
+      ]
+    });
+
+    tree.add({
+      label: "Label A",
+      id: "a",
+      opened: true
+    });
+
+    tree.add({
+      label: "Label B",
+      id: "b"
+    });
+
+    tree.add({
+      label: "Label A.A",
+      parent: "a",
+      id: "a.a",
+      opened: true,
+      selected: true
+    });
+
+    tree.add({
+      label: "Label A.A.A",
+      parent: "a.a"
+    });
+
+    tree.add({
+      label: "Label A.A.B",
+      parent: "a.a"
+    });
+
+    tree.add({
+      label: "Label B.A",
+      parent: "b"
+    });
+
+    this.GWTreeObj.addEventListener("vtree-open", (event: any) => {
+      //TODO add to layer
+      console.log(event.detail.id + " is opened");
+    });
+
+    this.GWTreeObj.addEventListener("vtree-close", (event: any) => {
+      //TODO add to layer
+      console.log(event.detail.id + " is opened");
+    });
+
+    this.GWTreeObj.addEventListener("vtree-select", (event: any) => {
+      //TODO add to layer
+      console.log(event.detail.id + " is opened");
+    });
+
+    this._createGWLayers();
+  };
 
   render() {
     const styles: DivStyle = {
@@ -103,17 +187,30 @@ class GWTree extends declared(Widget) {
       borderRadius: "25px"
     };
 
-    return (
-      <div
-        bind={this}
-        class={CSS.base}
-        styles={styles}
-        onclick={this._changeListMode}
-      >
-        <div>GWTREE Widget</div>
-      </div>
-    );
+    return "";
   }
+
+  _initGWTree = () => {
+    this.GWTreeObj = document.createElement("div");
+    this.GWTreeObj.id = "GWtree";
+
+    const expandContainer = document.createElement("div");
+    expandContainer.onclick = () => {
+      this._changeListMode();
+    };
+
+    this.expand = new Expand({
+      view: this.view,
+      expandIconClass: "esri-icon-applications",
+      content: this.GWTreeObj,
+      container: expandContainer,
+      id: 'gwTree'
+    });
+    this.view.ui.add(this.expand, "top-left");
+    const expandElement = document.getElementById("gwTree_controls_content");
+    expandElement.style.backgroundColor = "#fff";
+    expandElement.style.borderRadius = "7px";
+  };
 
   //-------------------------------------------------------------------
   //
@@ -128,14 +225,13 @@ class GWTree extends declared(Widget) {
         ? "show"
         : "hide-children";
     }
-  }
+  };
 
   _createGWLayers = () => {
     let groupLayer = new GroupLayer({
       title: "GWLayers",
       listMode: this.showChildren ? "show" : "hide-children"
     });
-    
 
     let gwClusterLayer = new FeatureLayer({
       title: "gwClusterLayer",
@@ -173,11 +269,16 @@ class GWTree extends declared(Widget) {
       source: []
     });
 
-    groupLayer.addMany([gwClusterLayer, gwPointLayer, gwPolygonLayer, gwPolylineLayer]);
+    groupLayer.addMany([
+      gwClusterLayer,
+      gwPointLayer,
+      gwPolygonLayer,
+      gwPolylineLayer
+    ]);
 
     this.layersState = {
       groupLayer: groupLayer,
-      gwClusterLauyer : gwClusterLayer,
+      gwClusterLauyer: gwClusterLayer,
       gwPointLayer: gwPointLayer,
       gwPolygonLayer: gwPolygonLayer,
       gwPolylineLayer: gwPolylineLayer
@@ -194,16 +295,13 @@ class GWTree extends declared(Widget) {
       extent
     };
 
-    if(!interacting){
+    if (!interacting) {
       // query for count
       // get cluster features
       // get raw data
     }
 
     console.log(this.mapState);
-  }
-  _onViewLoad = () => {
-    this._createGWLayers();
   };
 }
 
