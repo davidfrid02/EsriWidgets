@@ -59,16 +59,21 @@ const CSS = {
 class GWTree extends declared(Widget) {
   constructor() {
     super();
-    this._onViewLoad = this._onViewLoad.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
   }
 
   postInitialize() {
-    this._initGWTree();
-    this._onViewLoad();
+    this.GWTree();
     watchUtils.init(this, "view.center, view.interacting, view.scale", () =>
       this._onViewChange()
     );
+  }
+
+  GWTree() {
+    //Initialize GWtree element
+    this._initGWTree();
+    //Create the GWTree
+    this._createGWTree();
   }
 
   //----------------------------------
@@ -94,6 +99,10 @@ class GWTree extends declared(Widget) {
   @property()
   @renderable()
   expand: Expand;
+
+  @property()
+  @renderable()
+  GWTreeObj: any;
 
   //-------------------------------------------------------------------
   //
@@ -153,19 +162,22 @@ class GWTree extends declared(Widget) {
       parent: "b"
     });
 
-    tree.addEventListener('vtree-open', (evt) => {
-      console.log(evt.detail.id + ' is opened');
-    });
-    
-    tree.addEventListener('vtree-close', (evt) => {
-      console.log(evt.detail.id + ' is closed');
-    });
-    
-    tree.addEventListener('vtree-select', (evt) => {
-      console.log(evt.detail.id + ' is selected');
+    this.GWTreeObj.addEventListener("vtree-open", (event: any) => {
+      //TODO add to layer
+      console.log(event.detail.id + " is opened");
     });
 
-    this._changeListMode();
+    this.GWTreeObj.addEventListener("vtree-close", (event: any) => {
+      //TODO add to layer
+      console.log(event.detail.id + " is opened");
+    });
+
+    this.GWTreeObj.addEventListener("vtree-select", (event: any) => {
+      //TODO add to layer
+      console.log(event.detail.id + " is opened");
+    });
+
+    this._createGWLayers();
   };
 
   render() {
@@ -174,23 +186,31 @@ class GWTree extends declared(Widget) {
       padding: "30px 30px",
       borderRadius: "25px"
     };
-    
-    return ("");
+
+    return "";
   }
 
-  _initGWTree = () =>{
-    const GWTree = document.createElement("div");
-    GWTree.id = "GWtree";
+  _initGWTree = () => {
+    this.GWTreeObj = document.createElement("div");
+    this.GWTreeObj.id = "GWtree";
+
+    const expandContainer = document.createElement("div");
+    expandContainer.onclick = () => {
+      this._changeListMode();
+    };
 
     this.expand = new Expand({
       view: this.view,
       expandIconClass: "esri-icon-applications",
-      content: GWTree
+      content: this.GWTreeObj,
+      container: expandContainer,
+      id: 'gwTree'
     });
     this.view.ui.add(this.expand, "top-left");
-    setTimeout(this._createGWTree,300);
-
-  }
+    const expandElement = document.getElementById("gwTree_controls_content");
+    expandElement.style.backgroundColor = "#fff";
+    expandElement.style.borderRadius = "7px";
+  };
 
   //-------------------------------------------------------------------
   //
@@ -282,9 +302,6 @@ class GWTree extends declared(Widget) {
     }
 
     console.log(this.mapState);
-  };
-  _onViewLoad = () => {
-    this._createGWLayers();
   };
 }
 
