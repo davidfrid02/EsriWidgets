@@ -13,3 +13,6 @@ widgets/*/*.js
 widgets/*/*.js.map
 widgets/*.js
 widgets/*.js.map
+
+
+!widgets/GWTree/vanillatree.js
