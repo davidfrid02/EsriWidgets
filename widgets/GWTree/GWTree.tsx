@@ -13,7 +13,7 @@ var index = 0;
 import {
   subclass,
   declared,
-  property
+  property,
 } from "esri/core/accessorSupport/decorators";
 import Widget = require("esri/widgets/Widget");
 import watchUtils = require("esri/core/watchUtils");
@@ -52,7 +52,7 @@ interface DivStyle {
 }
 
 const CSS = {
-  base: "gwTree-widget"
+  base: "gwTree-widget",
 };
 
 @subclass("widgets.GWTree")
@@ -70,6 +70,8 @@ class GWTree extends declared(Widget) {
   }
 
   GWTree() {
+    //get tree data
+    this._getGWTreeData();
     //Initialize GWtree element
     this._initGWTree();
     //Create the GWTree
@@ -110,33 +112,45 @@ class GWTree extends declared(Widget) {
   //
   //-------------------------------------------------------------------
 
+  _getGWTreeData = () => {
+    fetch('http://localhost:3000/',{
+      mode: 'cors',
+    })
+  .then((response)=>response.json())
+  .then(function(data) {
+    console.log(data);
+  }).catch(function(error) {
+    console.log('Request failed', error);
+  });
+  };
+
   _createGWTree = () => {
     const tree = new VanillaTree("#GWtree", {
       contextmenu: [
         {
           label: "Hey",
-          action: function(id: any) {
+          action: function (id: any) {
             alert("Hey " + id);
-          }
+          },
         },
         {
           label: "Blah",
-          action: function(id: any) {
+          action: function (id: any) {
             alert("Blah " + id);
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
 
     tree.add({
       label: "Label A",
       id: "a",
-      opened: true
+      opened: true,
     });
 
     tree.add({
       label: "Label B",
-      id: "b"
+      id: "b",
     });
 
     tree.add({
@@ -144,22 +158,22 @@ class GWTree extends declared(Widget) {
       parent: "a",
       id: "a.a",
       opened: true,
-      selected: true
+      selected: true,
     });
 
     tree.add({
       label: "Label A.A.A",
-      parent: "a.a"
+      parent: "a.a",
     });
 
     tree.add({
       label: "Label A.A.B",
-      parent: "a.a"
+      parent: "a.a",
     });
 
     tree.add({
       label: "Label B.A",
-      parent: "b"
+      parent: "b",
     });
 
     this.GWTreeObj.addEventListener("vtree-open", (event: any) => {
@@ -184,7 +198,7 @@ class GWTree extends declared(Widget) {
     const styles: DivStyle = {
       backgroundColor: "white",
       padding: "30px 30px",
-      borderRadius: "25px"
+      borderRadius: "25px",
     };
 
     return "";
@@ -204,7 +218,7 @@ class GWTree extends declared(Widget) {
       expandIconClass: "esri-icon-applications",
       content: this.GWTreeObj,
       container: expandContainer,
-      id: 'gwTree'
+      id: "gwTree",
     });
     this.view.ui.add(this.expand, "top-left");
     const expandElement = document.getElementById("gwTree_controls_content");
@@ -230,7 +244,7 @@ class GWTree extends declared(Widget) {
   _createGWLayers = () => {
     let groupLayer = new GroupLayer({
       title: "GWLayers",
-      listMode: this.showChildren ? "show" : "hide-children"
+      listMode: this.showChildren ? "show" : "hide-children",
     });
 
     let gwClusterLayer = new FeatureLayer({
@@ -239,7 +253,7 @@ class GWTree extends declared(Widget) {
       objectIdField: "ObjectID",
       geometryType: "point",
       spatialReference: { wkid: 4326 },
-      source: []
+      source: [],
     });
 
     let gwPointLayer = new FeatureLayer({
@@ -248,7 +262,7 @@ class GWTree extends declared(Widget) {
       objectIdField: "ObjectID",
       geometryType: "point",
       spatialReference: { wkid: 4326 },
-      source: []
+      source: [],
     });
 
     let gwPolygonLayer = new FeatureLayer({
@@ -257,7 +271,7 @@ class GWTree extends declared(Widget) {
       objectIdField: "ObjectID",
       geometryType: "polygon",
       spatialReference: { wkid: 4326 },
-      source: []
+      source: [],
     });
 
     let gwPolylineLayer = new FeatureLayer({
@@ -266,14 +280,14 @@ class GWTree extends declared(Widget) {
       objectIdField: "ObjectID",
       geometryType: "polyline",
       spatialReference: { wkid: 4326 },
-      source: []
+      source: [],
     });
 
     groupLayer.addMany([
       gwClusterLayer,
       gwPointLayer,
       gwPolygonLayer,
-      gwPolylineLayer
+      gwPolylineLayer,
     ]);
 
     this.layersState = {
@@ -281,7 +295,7 @@ class GWTree extends declared(Widget) {
       gwClusterLauyer: gwClusterLayer,
       gwPointLayer: gwPointLayer,
       gwPolygonLayer: gwPolygonLayer,
-      gwPolylineLayer: gwPolylineLayer
+      gwPolylineLayer: gwPolylineLayer,
     };
 
     this.view.map.add(groupLayer);
@@ -292,7 +306,7 @@ class GWTree extends declared(Widget) {
     this.mapState = {
       interacting,
       scale,
-      extent
+      extent,
     };
 
     if (!interacting) {
