@@ -58,9 +58,8 @@
         "esri/Map",
         "esri/views/MapView",
         "esri/widgets/LayerList",
-        "widgets/Recenter",
         "widgets/GWTree"
-      ], function(Map, MapView, LayerList, Recenter, GWTree) {
+      ], function(Map, MapView, LayerList, GWTree) {
         // Create a Map
         var map = new Map({
           basemap: "topo"
@@ -86,13 +85,6 @@
           });
         view.ui.add(gwtree, "top-left");
 
-        // view.when(function() {
-        //   recenter = new Recenter({
-        //     view: view,
-        //     initialCenter: [34, 32]
-        //   });
-        //   view.ui.add(recenter, "top-right");
-        // });
       });
     </script>
   </head>
