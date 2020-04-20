@@ -12,6 +12,6 @@
     "suppressImplicitAnyIndexErrors": true,
     "allowJs": true
   },
-  "include": ["./widgets/*/*"],
+  "include": ["./app/*"],
   "exclude": ["node_modules"]
 }

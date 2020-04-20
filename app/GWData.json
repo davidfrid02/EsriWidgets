@@ -1,0 +1,95 @@
+{
+    "tree":[
+        {
+            "ID": 1,
+            "PARENT_ID": null,
+            "NAME": "all",
+            "children":[
+                {
+                    "ID": 2,
+                    "PARENT_ID": 1,
+                    "NAME": "Burgers",
+                    "children":[
+                        {
+                            "ID": 5,
+                            "PARENT_ID": 2,
+                            "NAME": "mcdonalds",
+                            "children":[
+                                {
+                                    "ID": 11,
+                                    "PARENT_ID": 5,
+                                    "NAME": "restaurant",
+                                    "children":[
+                                    ]
+                                },
+                                {
+                                    "ID": 12,
+                                    "PARENT_ID": 5,
+                                    "NAME": "employes",
+                                    "children":[
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "ID": 3,
+                    "PARENT_ID": 1,
+                    "NAME": "Asian",
+                    "children":[
+                        {
+                            "ID": 6,
+                            "PARENT_ID": 3,
+                            "NAME": "japanika",
+                            "children":[
+                            ]
+                        },
+                        {
+                            "ID": 7,
+                            "PARENT_ID": 3,
+                            "NAME": "foo",
+                            "children":[
+                                {
+                                    "ID": 13,
+                                    "PARENT_ID": 7,
+                                    "NAME": "chop-sticks",
+                                    "children":[
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "ID": 4,
+                    "PARENT_ID": 1,
+                    "NAME": "Pizza",
+                    "children":[
+                        {
+                            "ID": 8,
+                            "PARENT_ID": 4,
+                            "NAME": "dominos",
+                            "children":[
+                            ]
+                        },
+                        {
+                            "ID": 9,
+                            "PARENT_ID": 4,
+                            "NAME": "hut",
+                            "children":[
+                            ]
+                        },
+                        {
+                            "ID": 10,
+                            "PARENT_ID": 4,
+                            "NAME": "Tony Vespa",
+                            "children":[
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

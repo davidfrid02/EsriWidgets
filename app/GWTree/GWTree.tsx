@@ -1,55 +1,23 @@
 /// <amd-dependency path="esri/core/tsSupport/declareExtendsHelper" name="__extends" />
 /// <amd-dependency path="esri/core/tsSupport/decorateHelper" name="__decorate" />
 
-// pure js class for tree (this one is without jquery)
-// https://github.com/vakata/jstree/tree/v.4.0
-
-// react tree
-// https://github.com/react-component/tree
-// https://github.com/jakezatecky/react-checkbox-tree
-// https://github.com/naisutech/react-tree
-
-var index = 0;
 import {
   subclass,
   declared,
   property,
 } from "esri/core/accessorSupport/decorators";
-import Widget = require("esri/widgets/Widget");
-import watchUtils = require("esri/core/watchUtils");
-
-import VanillaTree = require("vanillatree");
-
+import Widget from "esri/widgets/Widget";
 import { renderable, tsx } from "esri/widgets/support/widget";
+import MapView from "esri/views/MapView";
+import SceneView from "esri/views/SceneView";
+import GroupLayer from "esri/layers/GroupLayer";
+import FeatureLayer from "esri/layers/FeatureLayer";
+import Expand from "esri/widgets/Expand";
+import { MapState, DivStyle, LayersState } from "../interfaces/Interfaces";
 
-import MapView = require("esri/views/MapView");
-import SceneView = require("esri/views/SceneView");
-import GroupLayer = require("esri/layers/GroupLayer");
-import FeatureLayer = require("esri/layers/FeatureLayer");
-import Extent = require("esri/geometry/Extent");
-import Expand = require("esri/widgets/Expand");
+import VanillaTree from "vanillatree";
 
-import layerConfig = require("./LayersConfig");
-
-interface LayersState {
-  groupLayer: GroupLayer;
-  gwClusterLauyer: FeatureLayer;
-  gwPointLayer: FeatureLayer;
-  gwPolylineLayer: FeatureLayer;
-  gwPolygonLayer: FeatureLayer;
-}
-
-interface MapState {
-  interacting: boolean;
-  scale: number;
-  extent: Extent;
-}
-
-interface DivStyle {
-  backgroundColor: string;
-  padding: string;
-  borderRadius: string;
-}
+import layerConfig from "./LayersConfig";
 
 const CSS = {
   base: "gwTree-widget",
@@ -64,9 +32,6 @@ class GWTree extends declared(Widget) {
 
   postInitialize() {
     this.GWTree();
-    watchUtils.init(this, "view.center, view.interacting, view.scale", () =>
-      this._onViewChange()
-    );
   }
 
   GWTree() {
@@ -113,15 +78,22 @@ class GWTree extends declared(Widget) {
   //-------------------------------------------------------------------
 
   _getGWTreeData = () => {
-    fetch('http://localhost:3000/',{
-      mode: 'cors',
-    })
-  .then((response)=>response.json())
-  .then(function(data) {
-    console.log(data);
-  }).catch(function(error) {
-    console.log('Request failed', error);
-  });
+    //i built a nodejs server to get data, 
+    // fetch("http://localhost:3000/", {
+    //   mode: "cors",
+    // })
+    //   .then((response) => response.json())
+    //   .then(function (data) {
+    //     console.log(data);
+    //   })
+    //   .catch(function (error) {
+    //     console.log("Request failed", error);
+    //   });
+
+    // ========= TZUR ==========
+    //For now just read the GWData.json file !!!
+    // =========================
+    //and build the tree!
   };
 
   _createGWTree = () => {

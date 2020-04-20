@@ -1,14 +1,8 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta
-      name="viewport"
-      content="initial-scale=1,maximum-scale=1,user-scalable=no"
-    />
-    <link rel="stylesheet" type="text/css" href="style/vanillatree.css">
-    <title>VectorTileLayer - 4.14</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
+    <title>ArcGIS JSAPI 4.15 TypeScript Demo</title>
     <style>
       html,
       body,
@@ -19,76 +13,27 @@
         width: 100%;
       }
     </style>
-
-    <link
-      rel="stylesheet"
-      href="https://js.arcgis.com/4.14/esri/themes/light/main.css"
-    />
-
+    <link rel="stylesheet" href="https://js.arcgis.com/4.15/esri/themes/light/main.css">
     <script>
       var locationPath = location.pathname.replace(/\/[^\/]+$/, "");
       window.dojoConfig = {
-        aliases: [
-          ["widgets/Recenter", "widgets/Recenter/Recenter"],
-          ["widgets/GWTree", "widgets/GWTree/GWTree"]
-        ],
         packages: [
           {
-            name: "widgets",
-            location: locationPath + "/widgets"
+            name: "app",
+            location: locationPath + "/app"
           },
           {
             name: "vanillatree",
-            location: locationPath + "/widgets/GWTree/",
+            location: locationPath + "/app/GWTree/",
             main: 'vanillatree'
           },
-          {
-            name: "jstree",
-            location: locationPath + "/widgets/GWTree/",
-            main: 'jstree'
-          }
         ]
       };
     </script>
-
-    <script src="https://js.arcgis.com/4.14/"></script>
-
-    <script>
-      require([
-        "esri/Map",
-        "esri/views/MapView",
-        "esri/widgets/LayerList",
-        "widgets/GWTree"
-      ], function(Map, MapView, LayerList, GWTree) {
-        // Create a Map
-        var map = new Map({
-          basemap: "topo"
-        });
-        // Make map view and bind it to the map
-        var view = new MapView({
-          container: "viewDiv",
-          map: map,
-          zoom: 3
-        });
-
-        var layerList = new LayerList({
-          view: view
-        });
-        // Adds widget below other elements in the top left corner of the view
-        view.ui.add(layerList, {
-          position: "top-left"
-        });
-
-        let gwtree = new GWTree({
-            view: view,
-            showChildren : false
-          });
-        view.ui.add(gwtree, "top-left");
-
-      });
-    </script>
+    <script src="https://js.arcgis.com/4.15"></script>
   </head>
   <body>
     <div id="viewDiv"></div>
+    <script>require(["app/main"]);</script>
   </body>
 </html>
